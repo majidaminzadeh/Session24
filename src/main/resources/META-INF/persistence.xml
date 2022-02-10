@@ -1,0 +1,9 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="">
+    <persistence-unit name="default">
+        <jta-data-source>jdbc/Session24</jta-data-source>
+        <class>com.tosan.gl.data.Account</class>
+        <class>com.tosan.gl.data.Branch</class>
+        <class>com.tosan.gl.data.GlEntry</class>
+        <class>com.tosan.gl.data.Currency</class>
+    </persistence-unit>
+</persistence>
