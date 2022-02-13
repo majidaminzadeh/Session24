@@ -19,8 +19,12 @@ public class Account {
     private Long id;
     private String code;
     private String title;
-//    private Branch branch;
+    @ManyToOne // branch_id
+//    @JoinColumn(name =)
+    private Branch branch;
+//    @ManyToOne // currency_id
 //    private Currency currency;
+//    @ManyToOne // glentry_id
 //    private GlEntry glEntry;
     private Date openingDate;
     private Date closingDate;

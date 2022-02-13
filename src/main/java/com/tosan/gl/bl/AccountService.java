@@ -1,10 +1,14 @@
 package com.tosan.gl.bl;
 
+import com.tosan.gl.da.AccountDAO;
+import com.tosan.gl.da.BranchDAO;
 import com.tosan.gl.data.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -15,10 +19,11 @@ import java.util.Date;
 @Stateless
 public class AccountService {
 
-    private String str;
+    @EJB
+    private AccountDAO accountDAO;
 
-    @PersistenceContext(unitName = "default")
-    private EntityManager entityManager;
+    @EJB
+    private BranchDAO branchDAO;
 
     @EJB
     private AccountDataService accountDataService;
@@ -34,19 +39,18 @@ public class AccountService {
 //        accountDataService = InitialContext.doLookup("java:module/AccountDataService");
 //    }
 
-    public Account openAccount(/*Branch branch, Currency currency, GlEntry glEntry, */BigDecimal initBalance){
-//        validateInput(branch, currency, glEntry, initBalance);
+    public Account openAccount(Branch branch, BigDecimal initBalance){
         Account account = new Account();
-//        account.setCode(accountDataService.generateAccountCode(branch, currency, glEntry));
-//        account.setTitle(accountDataService.generateAccountTitle(branch, currency, glEntry));
-//        account.setBranch(branch);
-//        account.setCurrency(currency);
+        Branch tempBranch = branchDAO.find(branch.getId());
+        if(tempBranch == null){
+            branch = branchDAO.save(branch);
+        }
+        account.setBranch(branch);
         account.setClosingDate(null);
-//        account.setGlEntry(glEntry);
         account.setOpeningDate(new Date());
         account.setBalance(initBalance);
         account.setStatus(AccountStatus.OPEN);
-        entityManager.persist(account);
+        account = accountDAO.save(account);
         return account;
     }
 
