@@ -3,6 +3,7 @@ package com.tosan.gl.bl;
 import com.tosan.gl.da.AccountDAO;
 import com.tosan.gl.da.BranchDAO;
 import com.tosan.gl.data.*;
+import com.tosan.gl.data.dto.AccountDto;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class AccountService {
@@ -27,6 +29,13 @@ public class AccountService {
 
     @EJB
     private AccountDataService accountDataService;
+
+    public List<AccountDto> findAccountByFilter(Account account){
+        //...validation
+        List<AccountDto> accounts = accountDAO.findBy(account.getBranch().getCode(), account.getOpeningDate());
+        //...
+        return accounts;
+    }
 
 //    @PostConstruct
 //    private void init(){
